@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.menu-text{
-    
+@layer components {
+    .menu-text{
+        @apply text-gray-500 font-bold text-sm;
+    }
+
+    .main-container{
+        @apply max-w-[90%] md:max-w-5xl mx-auto
+    }
 }
