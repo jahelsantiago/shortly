@@ -4,6 +4,7 @@ import Button from "@material-tailwind/react/Button";
 const LinkComponent = ({originalLink, shortenLink, fullShortenLink}) => {
     //copy the text to the clip board and then change its state again
     const handleCopy = () => {
+        navigator.clipboard.writeText(shortenLink)
         setCopyButton({color:"deepPurple", text: "Copied!"})
         setTimeout(()=>{
             setCopyButton({color : "cyan", text : "Copy"})

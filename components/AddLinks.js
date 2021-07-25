@@ -1,10 +1,8 @@
 import {React, useState} from 'react';
 import backgroundMobile from "../public/images/bg-shorten-mobile.svg"
 import backgroundDesktop from "../public/images/bg-shorten-desktop.svg"
-import Input from "@material-tailwind/react/Input";
 import Button from "@material-tailwind/react/Button";
 import Image from "next/image";
-import boost from "../public/images/bg-boost-desktop.svg";
 
 async function createLink(link){
     const shortenLink = {error : false, error_code : 0, originaLink : link, shortenLink : "temp"}
@@ -44,7 +42,7 @@ function AddLinks({linksList, setLinksList}) {
         <div className={"flex flex-col  space-y-4 md:space-x-4 md:space-y-0 md:flex-row bg-violet-dark relative top-[-85px] mb-[-50px] p-12"} style={{backgroundImage: `url(${backgroundMobile})`}}>
             <Image src={backgroundDesktop} layout={"fill"} objectFit={"cover"} className={"z-10"}/>
             <input placeholder={"Shorten a link here"}
-                   className={"h-12 flex-grow rounded-lg outline-none text-lg z-20"}
+                   className={"h-12 flex-grow rounded-lg outline-none text-lg z-20 pl-4 text-gray-700"}
                    value={linkInput}
                    onChange={handleInputChange}
             />
