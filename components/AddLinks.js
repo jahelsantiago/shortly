@@ -42,6 +42,7 @@ const handleError = (newLinkInput) => {
         case 10:
             message =  "Trying to shorten a disallowed Link."
     }
+    return message
 }
 
 function AddLinks({linksList, setLinksList, setFetchState, fetchState}) {
@@ -65,11 +66,11 @@ function AddLinks({linksList, setLinksList, setFetchState, fetchState}) {
         let newLinkInput = await createLink(linkInput)
         if(newLinkInput.hasError){
             const errorMessage = handleError(newLinkInput)
-            await setFetchState({...fetchState, message:errorMessage, loading : false })
-            return
+            console.log(errorMessage)
+            await setFetchState({message: errorMessage, loading : false, error : true })
         }else{
             setLinksList([newLinkInput, ...linksList])
-            await setFetchState({...fetchState, loading : false })
+            await setFetchState({...fetchState, loading : false, error : false})
         }
 
     }
@@ -82,7 +83,7 @@ function AddLinks({linksList, setLinksList, setFetchState, fetchState}) {
                        value={linkInput}
                        onChange={handleInputChange}
                 />
-                {linkError && <span className={"text-red-600 italic z-20"}>Please add a link</span>}
+                {linkError && <span className={"text-red-600 italic z-20"}>{"Empty Link"}</span>}
             </div>
             <Button
                 color="cyan"
