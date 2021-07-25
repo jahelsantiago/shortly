@@ -4,8 +4,9 @@ import backgroundDesktop from "../public/images/bg-shorten-desktop.svg"
 import Button from "@material-tailwind/react/Button";
 import Image from "next/image";
 
+
 async function createLink(link){
-    const shortenLink = {error : false, error_code : 0, originaLink : link, shortenLink : "temp"}
+    const shortenLink = {hasError : false, error_code : 0, originaLink : link, shortenLink : "temp"}
 
     let response = await fetch(`https://api.shrtco.de/v2/shorten?url=${link}`)
     let result = await response.json()
@@ -14,13 +15,36 @@ async function createLink(link){
         shortenLink.shortenLink = result.result.short_link
         shortenLink.full_short_link = result.result.full_short_link
     }else{
-        shortenLink.error = true
+        shortenLink.hasError = true
         shortenLink.error_code = result.error_code
     }
     return shortenLink
 }
 
-function AddLinks({linksList, setLinksList, setFetchState}) {
+const handleError = (newLinkInput) => {
+    let message = ""
+    switch (newLinkInput.error_code){
+        case 2:
+            message = "This is not a valid URL."
+            break
+        case 3:
+            message = "Rate limit reached. Wait a second and try again"
+            break
+        case 5:
+            message = "shortcode code (slug) already taken/in use"
+            break
+        case 6:
+            message = "Unknown error"
+            break
+        case 8:
+            message = "Invalid code submitted (code not found/there is no such short-link)"
+            break
+        case 10:
+            message =  "Trying to shorten a disallowed Link."
+    }
+}
+
+function AddLinks({linksList, setLinksList, setFetchState, fetchState}) {
     const [linkInput, setLinkInput] = useState("");
     const [linkError, setLinkError] = useState(false);
 
@@ -30,15 +54,24 @@ function AddLinks({linksList, setLinksList, setFetchState}) {
         setLinkError(false)
     }
 
+
     const handleSubmit = async () => {
         if(linkInput.length === 0){
             setLinkError(true)
             return
         }
-        await setFetchState(true)
+        await setFetchState({...fetchState, loading : true })
         setLinkInput("")
-        setLinksList([await createLink(linkInput), ...linksList])
-        await setFetchState(false)
+        let newLinkInput = await createLink(linkInput)
+        if(newLinkInput.hasError){
+            const errorMessage = handleError(newLinkInput)
+            await setFetchState({...fetchState, message:errorMessage, loading : false })
+            return
+        }else{
+            setLinksList([newLinkInput, ...linksList])
+            await setFetchState({...fetchState, loading : false })
+        }
+
     }
     return (
         <div className={"flex flex-col  space-y-4 md:space-x-4 md:space-y-0 md:flex-row bg-violet-dark relative top-[-85px] mb-[-50px] p-12"} style={{backgroundImage: `url(${backgroundMobile})`}}>
