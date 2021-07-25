@@ -1,7 +1,7 @@
 import {React, useState} from 'react';
 import Button from "@material-tailwind/react/Button";
 
-const LinkComponent = ({originalLink, shortenLink}) => {
+const LinkComponent = ({originalLink, shortenLink, fullShortenLink}) => {
     //copy the text to the clip board and then change its state again
     const handleCopy = () => {
         setCopyButton({color:"deepPurple", text: "Copied!"})
@@ -15,11 +15,11 @@ const LinkComponent = ({originalLink, shortenLink}) => {
     return (
         <div className={"bg-white flex flex-col  rounded-lg items-center px-4 md:flex-row"}>
             <div className={"flex justify-between flex-col md:flex-row md:flex-grow w-full"}>
-                <span className={"text-lg text-gray-700 font-bold my-4 cursor-pointer"}>
+                <a className={"text-lg text-gray-700 font-bold my-4 cursor-pointer"} href={originalLink} target={"_blank"}>
                     {originalLink}
-                </span>
+                </a>
                 <hr className={"text-gray-400 md:hidden w-full"}/>
-                <a className={"text-lg text-cyan-600 font-bold my-4 cursor-pointer"}>
+                <a className={"text-lg text-cyan-600 font-bold my-4 cursor-pointer"} href={fullShortenLink} target={"_blank"}>
                     {shortenLink}
                 </a>
             </div>
@@ -31,7 +31,7 @@ const LinkComponent = ({originalLink, shortenLink}) => {
                 block={false}
                 iconOnly={false}
                 ripple="light"
-                className={"w-full h-12 text-lg md:w-32 m-4"}
+                className={"w-full h-12 text-base md:w-32 m-4"}
                 onClick={handleCopy}
             >
                 {copyButton.text}

@@ -5,6 +5,9 @@ import AddLinks from "../components/AddLinks";
 import ShortenLinks from "../components/ShortenLinks";
 import BrandRecognition from "../components/BrandRecognition";
 import AdvancedStatics from "../components/AdvancedStatics";
+import BostLinks from "../components/BostLinks";
+import Footer from "../components/Footer";
+import React from "react";
 
 export default function Home() {
   return (
@@ -19,16 +22,21 @@ export default function Home() {
       </Head>
 
 
-        <div className={"pt-4 main-container px-8"}>
+        <div className={"pt-4 main-container md:px-8"}>
             <NavBar/>
             <Introduction/>
         </div>
 
-        <div className={"bg-gray-200 px-8"}>
+        <div className={"bg-gray-200 md:px-8 pb-64"}>
             <ShortenLinks/>
             <AdvancedStatics/>
             <BrandRecognition/>
         </div>
+        <BostLinks/>
+        <div className={"bg-black w-full"}>
+            <Footer/>
+        </div>
+
 
     </div>
   )

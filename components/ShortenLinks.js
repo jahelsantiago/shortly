@@ -13,7 +13,7 @@ const ShortenLinks = () => {
         <div className={"main-container space-y-6"}>
             <AddLinks linksList = {linksList} setLinksList = {setLinksList}/>
             {linksList.map((link, index)=>(
-                <ShortLinks originalLink={link.originaLink} shortenLink={link.shortenLink} key = {index}/>
+                <ShortLinks originalLink={link.originaLink} shortenLink={link.shortenLink} fullShortenLink={link.full_short_link} key = {index}/>
             ))}
         </div>
     );

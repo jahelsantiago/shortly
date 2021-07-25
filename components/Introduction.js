@@ -25,7 +25,7 @@ const Introduction = () => {
                     block={false}
                     iconOnly={false}
                     ripple="light"
-                    className={"mt-4 text-xl"}
+                    className={"mt-4 text-base"}
                 >
                     Get Started
                 </Button>
