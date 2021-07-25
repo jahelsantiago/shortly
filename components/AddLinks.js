@@ -20,10 +20,9 @@ async function createLink(link){
     return shortenLink
 }
 
-function AddLinks({linksList, setLinksList}) {
+function AddLinks({linksList, setLinksList, setFetchState}) {
     const [linkInput, setLinkInput] = useState("");
     const [linkError, setLinkError] = useState(false);
-
 
 
     const handleInputChange = (e)=>{
@@ -36,17 +35,22 @@ function AddLinks({linksList, setLinksList}) {
             setLinkError(true)
             return
         }
+        await setFetchState(true)
+        setLinkInput("")
         setLinksList([await createLink(linkInput), ...linksList])
+        await setFetchState(false)
     }
     return (
         <div className={"flex flex-col  space-y-4 md:space-x-4 md:space-y-0 md:flex-row bg-violet-dark relative top-[-85px] mb-[-50px] p-12"} style={{backgroundImage: `url(${backgroundMobile})`}}>
             <Image src={backgroundDesktop} layout={"fill"} objectFit={"cover"} className={"z-10"}/>
-            <input placeholder={"Shorten a link here"}
-                   className={"h-12 flex-grow rounded-lg outline-none text-lg z-20 pl-4 text-gray-700"}
-                   value={linkInput}
-                   onChange={handleInputChange}
-            />
-            {linkError && <span className={"text-red-600 italic my-0 z-20"}>Please add a link</span>}
+            <div className={"flex-grow z-20"}>
+                <input placeholder={"Shorten a link here"}
+                       className={"h-12 w-full rounded-lg outline-none text-lg z-20 pl-4 text-gray-700"}
+                       value={linkInput}
+                       onChange={handleInputChange}
+                />
+                {linkError && <span className={"text-red-600 italic z-20"}>Please add a link</span>}
+            </div>
             <Button
                 color="cyan"
                 buttonType="filled"
