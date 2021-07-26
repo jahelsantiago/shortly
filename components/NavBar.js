@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Image from "next/image"
 import logo from "../public/images/logo.svg"
 import Icon from "@material-tailwind/react/Icon";
@@ -9,24 +9,27 @@ function NavBar(props) {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const handleMenuOpen = () =>{
-        console.log("hola")
-        alert("Hola")
+        setMenuOpen(prev => !prev)
     }
     return (
-        <div className={"flex justify-between items-center"}>
-            <Image src={logo}/>
-            <IconButton onClick = {handleMenuOpen} className={"md:hidden"}>
-                <Icon name="menu" size="3xl" className = "text-red-800"/>
-            </IconButton>
-            <MenuFull/>
-
-
+        <div className={"fixed top-0 inset-x-0 main-container z-50"}>
+            <div className={"flex justify-between my-8"}>
+                <Image src={logo}/>
+                <IconButton onClick = {handleMenuOpen} className={"md:hidden"}>
+                    <Icon name="menu" size="3xl" className = "text-red-800"/>
+                </IconButton>
+                <MenuFull/>
+            </div>
+            {menuOpen && <MenuSmall setOpen={setMenuOpen}/>}
         </div>
+
+
     );
 }
 
 function MenuFull(){
-    return(<div className={"hidden md:flex justify-between items-center flex-grow ml-7  sticky"}>
+    return(
+        <div className={"hidden md:flex justify-between items-center flex-grow ml-7"}>
         <div className={"space-x-4 flex "}>
             <SmallButton>
                 <a className={"menu-text"}>Feature</a>
@@ -42,30 +45,41 @@ function MenuFull(){
             <SmallButton>
                 <a className={"menu-text"}>Login</a>
             </SmallButton>
-            <Button
-                color="cyan"
-                buttonType="filled"
-                size="regular"
-                rounded={true}
-                block={false}
-                iconOnly={false}
-                ripple="light"
-                className={"py-auto capitalize"}
-            >
-                Sign Up
-            </Button>
-
+            <SignupButton/>
         </div>
     </div>)
 }
 
-function Menu(){
+function MenuSmall({setOpen}){
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, setOpen);
+
     return(
-        <div className={"w-full bg-red-900 absolute top-0 flex flex-col items-center rounded-lg"}>
-            <a>Feature</a>
-            <a>Prices</a>
-            <a>Resource</a>
+        <div ref={wrapperRef} className={"main-container bg-violet-dark  flex flex-col items-center rounded-lg md:hidden p-8"}>
+            <a className={"menu-item"}>Feature</a>
+            <a className={"menu-item"}>Prices</a>
+            <a className={"menu-item"}>Resource</a>
+            <span className={"h-px w-10/12 bg-gray-500 my-4 "}/>
+            <a className={"menu-item"}>Login</a>
+            <SignupButton/>
         </div>
+    )
+}
+
+function SignupButton() {
+    return(
+        <Button
+            color="cyan"
+            buttonType="filled"
+            size="regular"
+            rounded={true}
+            block={false}
+            iconOnly={false}
+            ripple="light"
+            className={"py-auto capitalize w-full text-lg md:text-sm"}
+        >
+            Sign Up
+        </Button>
     )
 }
 
@@ -103,5 +117,22 @@ const IconButton = ({children, onClick, className}) => {
         </Button>
     );
 };
+
+/**
+ * Hook that alerts clicks outside of the passed ref
+ */
+function useOutsideAlerter(ref, setOpen) {
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (ref.current && !ref.current.contains(event.target)) {
+                setOpen(false)
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [ref]);
+}
 
 export default NavBar;

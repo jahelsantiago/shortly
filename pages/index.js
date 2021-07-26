@@ -22,7 +22,7 @@ export default function Home() {
       </Head>
 
 
-        <div className={"pt-4 main-container md:px-8"}>
+        <div className={"pt-4 main-container md:px-8 pt-24"}>
             <NavBar/>
             <Introduction/>
         </div>

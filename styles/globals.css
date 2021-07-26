@@ -10,4 +10,7 @@
     .main-container{
         @apply max-w-[90%] md:max-w-5xl mx-auto
     }
+    .menu-item{
+        @apply text-white font-bold text-xl py-4
+    }
 }
